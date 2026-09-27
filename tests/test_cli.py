@@ -12,6 +12,7 @@ def run_cli(*args: str) -> subprocess.CompletedProcess[str]:
         [sys.executable, "-m", "toolkit", *args],
         capture_output=True,
         text=True,
+        check=False,
     )
 
 

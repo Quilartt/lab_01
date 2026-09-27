@@ -1,52 +1,61 @@
-from .errors import IncompatibleUnits,AbsoluteZeroException, InvalidValue, UnknownUnit
+from .errors import AbsoluteZero, IncompatibleUnits, InvalidValue, UnknownUnit
+import math
 
-dict_length = {"km": 1000, "m": 1, "cm": 0.01, "mm": 0.001}
+LENGTH = {"km": 1000, "m": 1, "cm": 0.01, "mm": 0.001}
 
-dict_mass = {"g": 1, "kg": 1000}
+MASS = {"g": 1, "kg": 1000}
 
-dict_temp = {"c", "f", "k"}
+TEMP = {"c", "f", "k"}
 
 
 def convert_from_c(value: float, to_unit: str) -> float:
+    """Переводит температуру из градусов Цельсия в указанную единицу."""
+
     if value + 273.15 < 0:
-        raise AbsoluteZeroException("Температура меньше абсолютного 0")
+        raise AbsoluteZero("Температура ниже абсолютного нуля")
     elif to_unit == "k":
         result = value + 273.15
     elif to_unit == "f":
-        result = value*9/5+32
+        result = value * 9 / 5 + 32
     else:
         result = value
     return result
 
 
 def convert(value: str, from_unit: str, to_unit: str) -> float:
+    """Конвертирует из одной величины в другую"""
+
     from_unit = from_unit.lower()
     to_unit = to_unit.lower()
-    try:
+    if not math.isfinite(value):
+        raise InvalidValue(f"Недопустимое значение: {value}")
+    else:
         value = float(value)
-    except (TypeError, ValueError) as exc:
-        raise InvalidValue(f"Недопустимое значение: {value}") from exc
-
-    known = set(dict_length) | set(dict_mass) | dict_temp
-    if from_unit not in known:
-        raise UnknownUnit("Недопустимая единица измерения", from_unit)
-    if to_unit not in known:
-        raise UnknownUnit("Недопустимая единица измерения", to_unit)
     
-    if from_unit in dict_length:
-        if to_unit in dict_length:
-            result = dict_length[from_unit]/dict_length[to_unit]*value
+    # Валидация входных единиц измерения
+    known = set(LENGTH) | set(MASS) | set(TEMP)
+    if from_unit not in known:
+        raise UnknownUnit(f"Недопустимая единица измерения: {from_unit}")
+    if to_unit not in known:
+        raise UnknownUnit(f"Недопустимая единица измерения: {to_unit}")
+
+    # Конвертер длин
+    if from_unit in LENGTH:
+        if to_unit in LENGTH:
+            result = LENGTH[from_unit] / LENGTH[to_unit] * value
         else: 
             raise IncompatibleUnits(f"Невозможен перевод из {from_unit} в {to_unit}")
 
-    if from_unit in dict_mass:
-        if to_unit in dict_mass:
-            result = dict_mass[from_unit]/dict_mass[to_unit]*value
+    # Конвертер масс
+    elif from_unit in MASS:
+        if to_unit in MASS:
+            result = MASS[from_unit] / MASS[to_unit] * value
         else: 
             raise IncompatibleUnits(f"Невозможен перевод из {from_unit} в {to_unit}")
 
-    if from_unit in dict_temp:
-        if to_unit not in dict_temp:
+    # Конвертер температур
+    elif from_unit in TEMP:
+        if to_unit not in TEMP:
             raise IncompatibleUnits(f"Невозможен перевод из {from_unit} в {to_unit}")
         else:
             if from_unit == "c":

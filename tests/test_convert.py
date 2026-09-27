@@ -4,12 +4,11 @@ import pytest
 
 from toolkit.converter import convert
 from toolkit.errors import (
-    AbsoluteZeroException,
+    AbsoluteZero,
     IncompatibleUnits,
     InvalidValue,
     UnknownUnit,
 )
-
 
 # ── Длина ─────────────────────────────────────────────
 
@@ -58,7 +57,7 @@ def test_mixed_case_units() -> None:
 # ── Негативные ────────────────────────────────────────
 
 def test_below_absolute_zero() -> None:
-    with pytest.raises(AbsoluteZeroException):
+    with pytest.raises(AbsoluteZero):
         convert("-300", "c", "k")
 
 

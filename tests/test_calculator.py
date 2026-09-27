@@ -6,11 +6,12 @@ from toolkit.calculator import calculate
 from toolkit.errors import (
     DivisionByZero,
     EmptyExpression,
+    InvalidNumber,
     MissingOperand,
+    MissingOperator,
     TwoOperators,
     UnknownSymbol,
 )
-
 
 # ── Позитивные (6 по ТЗ) ───────────────────────────────
 
@@ -60,5 +61,5 @@ def test_division_by_zero() -> None:
 
 
 def test_double_dot() -> None:
-    with pytest.raises(Exception):        # InvalidNumber или UnknownSymbol
+    with pytest.raises(InvalidNumber):        # InvalidNumber или UnknownSymbol
         calculate("2..5")

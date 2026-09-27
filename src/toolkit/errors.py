@@ -14,6 +14,10 @@ class MissingOperand(ToolkitError):
     pass
 
 
+class MissingOperator(ToolkitError):
+    pass
+
+
 class TwoOperators(ToolkitError):
     pass
 
@@ -34,7 +38,7 @@ class InvalidValue(ToolkitError):
     pass
 
 
-class AbsoluteZeroException(ToolkitError):
+class AbsoluteZero(ToolkitError):
     pass
 
 
