@@ -3,6 +3,7 @@
 Python-пакет с CLI, содержащий калькулятор выражений и конвертер физических величин.
 
 ## Структура проекта
+```bash
 lab_01/
 pyproject.toml
 README.md
@@ -17,7 +18,7 @@ tests/
 test_calculator.py
 test_convert.py
 test_cli.py
-
+```
 
 ## Описание модулей
 
