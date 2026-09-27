@@ -1,86 +1,102 @@
-"""Тесты ядра конвертера."""
-
 import pytest
 
 from toolkit.converter import convert
 from toolkit.errors import (
     AbsoluteZero,
     IncompatibleUnits,
-    InvalidValue,
     UnknownUnit,
 )
 
-# ── Длина ─────────────────────────────────────────────
+# -----Позитивные-------------------------------
 
-def test_mm_to_m() -> None:
-    assert convert("1000", "mm", "m") == pytest.approx(1.0)
-
-
-def test_km_to_m() -> None:
-    assert convert("1", "km", "m") == pytest.approx(1000.0)
+def test_positive_01():
+    assert convert("3456", "mm", "m") == pytest.approx(3.456, rel=1e-8)
 
 
-# ── Масса ─────────────────────────────────────────────
-
-def test_kg_to_g() -> None:
-    assert convert("1.5", "kg", "g") == pytest.approx(1500.0)
+def test_positive_02():
+    assert convert("12345", "cm", "km") == pytest.approx(0.12345, rel=1e-8)
 
 
-# ── Температура ───────────────────────────────────────
-
-def test_c_to_f() -> None:
-    assert convert("0", "c", "f") == pytest.approx(32.0)
+def test_positive_03():
+    assert convert("0.007", "km", "mm") == pytest.approx(7000.0, rel=1e-8)
 
 
-def test_c_to_k() -> None:
-    assert convert("-273.15", "c", "k") == pytest.approx(0.0)
+def test_positive_04():
+    assert convert("12.34", "m", "cm") == pytest.approx(1234.0, rel=1e-8)
 
 
-def test_f_to_c() -> None:
-    assert convert("32", "f", "c") == pytest.approx(0.0)
+def test_positive_05():
+    assert convert("2.5", "kg", "g") == pytest.approx(2500.0, rel=1e-8)
 
 
-def test_k_to_c() -> None:
-    assert convert("0", "k", "c") == pytest.approx(-273.15)
+def test_positive_06():
+    assert convert("3456", "g", "kg") == pytest.approx(3.456, rel=1e-8)
 
 
-# ── Регистр ───────────────────────────────────────────
-
-def test_uppercase_units() -> None:
-    assert convert("1000", "MM", "M") == pytest.approx(1.0)
+def test_positive_07():
+    assert convert("100", "c", "f") == pytest.approx(212.0, rel=1e-8)
 
 
-def test_mixed_case_units() -> None:
-    assert convert("1", "Kg", "G") == pytest.approx(1000.0)
+def test_positive_08():
+    assert convert("27", "c", "k") == pytest.approx(300.15, rel=1e-8)
 
 
-# ── Негативные ────────────────────────────────────────
+def test_positive_09():
+    assert convert("98.6", "f", "c") == pytest.approx(37.0, rel=1e-8)
 
-def test_below_absolute_zero() -> None:
+
+def test_positive_10():
+    assert convert("1000", "MM", "M") == pytest.approx(1.0, rel=1e-8)
+
+
+
+# -------Негативные------------------------------------
+
+def test_negative_01():
     with pytest.raises(AbsoluteZero):
-        convert("-300", "c", "k")
+        convert("-274", "c", "k")
 
 
-def test_incompatible_units() -> None:
+def test_negative_02():
+    with pytest.raises(AbsoluteZero):
+        convert("-460", "f", "c")
+
+
+def test_negative_03():
+    with pytest.raises(AbsoluteZero):
+        convert("-1", "k", "c")
+
+
+def test_negative_04():
     with pytest.raises(IncompatibleUnits):
-        convert("1", "kg", "m")
+        convert("1000", "kg", "m")
 
 
-def test_unknown_from_unit() -> None:
+def test_negative_05():
+    with pytest.raises(IncompatibleUnits):
+        convert("1", "m", "c")
+
+
+def test_negative_06():
+    with pytest.raises(IncompatibleUnits):
+        convert("500", "mm", "g")
+
+
+def test_negative_07():
+    with pytest.raises(IncompatibleUnits):
+        convert("100", "k", "m")
+
+
+def test_negative_08():
     with pytest.raises(UnknownUnit):
         convert("1", "foo", "m")
 
 
-def test_unknown_to_unit() -> None:
+def test_negative_09():
     with pytest.raises(UnknownUnit):
-        convert("1", "m", "foo")
+        convert("1", "m", "bar")
 
 
-def test_invalid_value() -> None:
-    with pytest.raises(InvalidValue):
-        convert("abc", "m", "km")
-
-
-def test_incompatible_temp_and_length() -> None:
-    with pytest.raises(IncompatibleUnits):
-        convert("1", "c", "m")
+def test_negative_10():
+    with pytest.raises(UnknownUnit):
+        convert("1", "mile", "km")

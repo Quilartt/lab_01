@@ -1,3 +1,12 @@
+[project]
+name = "lab_01"
+version = "0.1.0"
+description = "Python-пакет с CLI, содержащий калькулятор и конвертер величин."
+requires-python = ">=3.12"
+dependencies = [
+    "pytest>=9.1.1",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"

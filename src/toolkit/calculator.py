@@ -68,7 +68,8 @@ def tokenize_fsm(expr: str) -> list[tuple[str, float | str]]:
         raise EmptyExpression("Пустая строка ввода")
 
 
-def validate_tokens(tokens: list[tuple[str, float | str]]) -> list[tuple[str, float | str]]:
+def validate_tokens(tokens: list[tuple[str, float | str]]) \
+-> list[tuple[str, float | str]]:
     """Проверка синтаксиса и разметка унарных знаков"""
     res_tokens = []
     prev = ""

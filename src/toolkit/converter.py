@@ -1,5 +1,6 @@
-from .errors import AbsoluteZero, IncompatibleUnits, InvalidValue, UnknownUnit
 import math
+
+from .errors import AbsoluteZero, IncompatibleUnits, InvalidValue, UnknownUnit
 
 LENGTH = {"km": 1000, "m": 1, "cm": 0.01, "mm": 0.001}
 
@@ -27,10 +28,15 @@ def convert(value: str, from_unit: str, to_unit: str) -> float:
 
     from_unit = from_unit.lower()
     to_unit = to_unit.lower()
+
+    # Проверка на возможность перевода строки в число
+    try:
+        value = float(value)
+    except ValueError:
+        raise InvalidValue(f"Недопустимое значение: {value}")
+    
     if not math.isfinite(value):
         raise InvalidValue(f"Недопустимое значение: {value}")
-    else:
-        value = float(value)
     
     # Валидация входных единиц измерения
     known = set(LENGTH) | set(MASS) | set(TEMP)
