@@ -45,7 +45,7 @@ def main(argv: list[str] | None = None) -> None:
 
     if args.command == "calc":
         parts = list(args.expression) + list(extra)
-        expression = " ".join(parts)
+        expression = "".join(parts)
         if not expression.strip():
             parser.error("calc: не указано выражение")
         result = calculate(expression)
